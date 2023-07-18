@@ -1,0 +1,76 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /move:
+    post:
+      tags:
+        - server-controller
+      operationId: move
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Move'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GameStatus'
+  /status:
+    get:
+      tags:
+        - server-controller
+      operationId: status
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GameStatus'
+components:
+  schemas:
+    Move:
+      type: object
+      properties:
+        player:
+          type: string
+          enum:
+            - YELLOW
+            - RED
+            - NONE
+        moveColumn:
+          type: integer
+          format: int32
+    BoardStatus:
+      type: object
+      properties:
+        board:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+              enum:
+                - YELLOW
+                - RED
+                - NONE
+    GameStatus:
+      type: object
+      properties:
+        playerTurn:
+          type: string
+          enum:
+            - YELLOW
+            - RED
+            - NONE
+        boardStatus:
+          $ref: '#/components/schemas/BoardStatus'
