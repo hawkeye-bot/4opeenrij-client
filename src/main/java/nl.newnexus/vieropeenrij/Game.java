@@ -4,6 +4,7 @@ import nl.newnexus.model.BoardStatus;
 import nl.newnexus.model.GameStatus;
 import nl.newnexus.model.Move;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Game {
     static final int maxCharsCellText = 6;
     static final Move.PlayerEnum playColor = Move.PlayerEnum.YELLOW;
 
+
     private String getCellText(List<List<BoardStatus.BoardEnum>> board, int column, int row) {
         String text = board.get(column).get(row).toString();
         return StringUtils.rightPad(text, maxCharsCellText);
@@ -23,7 +25,9 @@ public class Game {
     public void presentGameStatus() {
         try {
             final String uri = baseUrl + "status";
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = new RestTemplateBuilder()
+                    .basicAuthentication("piet", "niet")
+                    .build();
             GameStatus gameStatus = restTemplate.getForObject(uri, GameStatus.class);
             BoardStatus board = gameStatus.getBoardStatus();
 
